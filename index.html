@@ -3,380 +3,210 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Practica las Tablas de Multiplicar</title>
+    <title>Generador de Prompts Didácticos Cristianos</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
     <style>
-        :root {
-            /* Paleta de Colores Estricta */
-            --t1-color: #90EE90; /* Verde Claro */
-            --t2-color: #FF69B4; /* Rosa/Fucsia */
-            --t3-color: #228B22; /* Verde Oscuro/Césped */
-            --t4-color: #FFFACD; /* Amarillo Pálido */
-            --t5-color: #FF4500; /* Rojo Naranja */
-            --t6-color: #FFA500; /* Naranja */
-            --t7-color: #B22222; /* Rojo Ladrillo */
-            --t8-color: #39FF14; /* Verde Neón */
-            --t9-color: #8A2BE2; /* Violeta/Púrpura */
-            --t10-color: #00008B; /* Azul Oscuro */
-            
-            --bg-color: #f4f4f9;
-            --text-color: #333;
-            --quiz-btn-color: #333;
-        }
-
         body {
+            background-color: #f0f4f8;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-color);
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            min-height: 100vh;
-            color: var(--text-color);
         }
-
-        #app-container {
-            width: 100%;
-            max-width: 800px;
-            background: white;
-            padding: 20px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            border-radius: 12px;
-            margin: 20px;
-            text-align: center;
-        }
-
-        h1 {
-            color: #2c3e50;
-            margin-bottom: 25px;
-        }
-
-        /* Navegación */
-        #nav-tables {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
-            gap: 10px;
-            margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 2px solid #eee;
-        }
-
-        .nav-btn {
-            border: none;
-            padding: 10px 5px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: bold;
-            color: white;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.3);
-            transition: transform 0.2s, filter 0.2s;
-        }
-
-        .nav-btn:hover {
-            transform: translateY(-2px);
-            filter: brightness(1.1);
-        }
-
-        /* Asignación de colores a botones */
-        #btn-1 { background-color: var(--t1-color); color: #006400; text-shadow: none; } /* Ajuste contraste */
-        #btn-2 { background-color: var(--t2-color); }
-        #btn-3 { background-color: var(--t3-color); }
-        #btn-4 { background-color: var(--t4-color); color: #333; text-shadow: none; } /* Ajuste contraste */
-        #btn-5 { background-color: var(--t5-color); }
-        #btn-6 { background-color: var(--t6-color); }
-        #btn-7 { background-color: var(--t7-color); }
-        #btn-8 { background-color: var(--t8-color); color: #333; text-shadow: none;} /* Ajuste contraste */
-        #btn-9 { background-color: var(--t9-color); }
-        #btn-10 { background-color: var(--t10-color); }
-
-        .quiz-start-btn {
-            grid-column: 1 / -1;
-            background-color: var(--quiz-btn-color);
-            color: white;
-            padding: 12px;
-            margin-top: 10px;
-            font-size: 1.1em;
-        }
-
-        /* Área de Visualización */
-        #display-content {
-            min-height: 300px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: flex-start;
-        }
-
-        .table-list {
-            list-style: none;
-            padding: 0;
-            width: 100%;
-            max-width: 400px;
-        }
-
-        .table-item {
-            padding: 10px;
-            margin: 5px 0;
-            border-radius: 6px;
-            font-size: 1.2em;
-            font-weight: bold;
-            display: flex;
-            justify-content: space-between;
-            padding-left: 30px;
-            padding-right: 30px;
-        }
-
-        /* Sección Quiz */
-        #quiz-section {
-            width: 100%;
-            max-width: 400px;
-            text-align: center;
-        }
-
-        .hidden { display: none; }
-
-        .question-box {
-            font-size: 2.5em;
-            margin: 20px 0;
-            font-weight: bold;
-            color: #2c3e50;
-        }
-
-        input[type="number"] {
-            padding: 10px;
-            font-size: 1.5em;
-            width: 100px;
-            text-align: center;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            margin-bottom: 20px;
-        }
-
-        .action-btn {
-            background-color: #27ae60;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            font-size: 1.2em;
-            border-radius: 8px;
-            cursor: pointer;
-        }
-
-        .action-btn:hover { background-color: #219150; }
-
-        #feedback {
-            margin-top: 20px;
-            font-size: 1.2em;
-            font-weight: bold;
-            min-height: 30px;
-        }
-
-        .feedback-correct { color: #27ae60; }
-        .feedback-wrong { color: #c0392b; }
-
-        #score-board {
-            margin-top: 20px;
-            font-size: 0.9em;
-            color: #7f8c8d;
-        }
-
-        /* Media Queries */
-        @media (max-width: 600px) {
-            h1 { font-size: 1.5em; }
-            #nav-tables { grid-template-columns: repeat(5, 1fr); }
-            .question-box { font-size: 2em; }
+        .gradient-header {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
         }
     </style>
 </head>
-<body>
+<body class="text-gray-800">
 
-<div id="app-container">
-    <h1>Practica las Tablas de Multiplicar (1 al 10)</h1>
+    <header class="gradient-header text-white p-6 shadow-lg">
+        <div class="max-w-4xl mx-auto">
+            <h1 class="text-3xl font-bold"><i class="fas fa-brain mr-2"></i> Generador de Secuencias Didácticas</h1>
+            <p class="mt-2 text-blue-100">Enfoque Cristiano, Evaluación y Aprendizaje Significativo</p>
+        </div>
+    </header>
 
-    <nav id="nav-tables">
-        <button id="btn-1" class="nav-btn" onclick="displayTable(1)">Tabla del 1</button>
-        <button id="btn-2" class="nav-btn" onclick="displayTable(2)">Tabla del 2</button>
-        <button id="btn-3" class="nav-btn" onclick="displayTable(3)">Tabla del 3</button>
-        <button id="btn-4" class="nav-btn" onclick="displayTable(4)">Tabla del 4</button>
-        <button id="btn-5" class="nav-btn" onclick="displayTable(5)">Tabla del 5</button>
-        <button id="btn-6" class="nav-btn" onclick="displayTable(6)">Tabla del 6</button>
-        <button id="btn-7" class="nav-btn" onclick="displayTable(7)">Tabla del 7</button>
-        <button id="btn-8" class="nav-btn" onclick="displayTable(8)">Tabla del 8</button>
-        <button id="btn-9" class="nav-btn" onclick="displayTable(9)">Tabla del 9</button>
-        <button id="btn-10" class="nav-btn" onclick="displayTable(10)">Tabla del 10</button>
+    <main class="max-w-4xl mx-auto p-6">
         
-        <button class="nav-btn quiz-start-btn" onclick="startQuiz()">Comenzar Quiz Global</button>
-    </nav>
-
-    <div id="display-content">
-        <h2 id="section-title">¡Bienvenido!</h2>
-        <p id="welcome-text">Selecciona una tabla arriba para estudiar o inicia el Quiz para probar tus conocimientos.</p>
-        <ul id="table-list-container" class="table-list"></ul>
-    </div>
-
-    <div id="quiz-section" class="hidden">
-        <div id="score-board">Pregunta: <span id="q-current">1</span>/10 | Puntos: <span id="score">0</span></div>
-        <div class="question-box" id="question-text"></div>
-        <input type="number" id="answer-input" placeholder="?" onkeydown="if(event.key === 'Enter') checkAnswer()">
-        <br>
-        <button class="action-btn" onclick="checkAnswer()" id="check-btn">Verificar</button>
-        <div id="feedback"></div>
-        <button class="action-btn hidden" onclick="nextQuestion()" id="next-btn" style="background-color: #2980b9; margin-top:10px;">Siguiente</button>
-    </div>
-</div>
-
-<script>
-    // --- LÓGICA DE DATOS ---
-    const colors = {
-        1: 'var(--t1-color)', 2: 'var(--t2-color)', 3: 'var(--t3-color)',
-        4: 'var(--t4-color)', 5: 'var(--t5-color)', 6: 'var(--t6-color)',
-        7: 'var(--t7-color)', 8: 'var(--t8-color)', 9: 'var(--t9-color)',
-        10: 'var(--t10-color)'
-    };
-
-    // Generar datos matemáticos
-    const tablesData = {};
-    for (let i = 1; i <= 10; i++) {
-        tablesData[i] = [];
-        for (let j = 1; j <= 10; j++) {
-            tablesData[i].push({ multiplier: j, result: i * j });
-        }
-    }
-
-    // --- VARIABLES DEL QUIZ ---
-    let currentQuestion = 0;
-    let score = 0;
-    let totalQuestions = 10;
-    let currentProblem = { a: 0, b: 0, ans: 0 };
-    let quizActive = false;
-
-    // --- DOM ELEMENTS ---
-    const displayContent = document.getElementById('display-content');
-    const tableListContainer = document.getElementById('table-list-container');
-    const sectionTitle = document.getElementById('section-title');
-    const welcomeText = document.getElementById('welcome-text');
-    const quizSection = document.getElementById('quiz-section');
-    
-    // --- MODO DE REVISIÓN ---
-    function displayTable(n) {
-        // Reset UI
-        quizActive = false;
-        quizSection.classList.add('hidden');
-        displayContent.classList.remove('hidden');
-        welcomeText.style.display = 'none';
-        
-        // Configurar Título y Color
-        sectionTitle.innerText = `Tabla del ${n}`;
-        sectionTitle.style.color = 'var(--text-color)';
-        
-        // Limpiar lista anterior
-        tableListContainer.innerHTML = '';
-
-        // Poblar lista usando datos
-        tablesData[n].forEach(item => {
-            const li = document.createElement('li');
-            li.className = 'table-item';
-            li.style.backgroundColor = colors[n];
+        <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+            <h2 class="text-xl font-bold text-blue-800 mb-4 border-b pb-2"><i class="fas fa-edit mr-2"></i> 1. Datos de la Clase</h2>
             
-            // Ajuste de color de texto para fondos claros vs oscuros
-            if ([3, 7, 9, 10].includes(n)) {
-                li.style.color = 'white';
-            } else {
-                li.style.color = '#333';
-            }
+            <form id="classForm" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-semibold text-gray-600 mb-1">Grado / Nivel Educativo</label>
+                    <input type="text" id="grado" placeholder="Ej. 5to Primaria" class="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500 outline-none">
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-gray-600 mb-1">Edad de los Estudiantes</label>
+                    <input type="text" id="edad" placeholder="Ej. 10-11 años" class="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500 outline-none">
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-gray-600 mb-1">Materia / Asignatura</label>
+                    <input type="text" id="materia" placeholder="Ej. Ciencias Naturales" class="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500 outline-none">
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-gray-600 mb-1">Duración de la Sesión</label>
+                    <select id="duracion" class="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500 outline-none">
+                        <option value="45 minutos">45 minutos</option>
+                        <option value="60 minutos">60 minutos</option>
+                        <option value="90 minutos">90 minutos</option>
+                    </select>
+                </div>
+                <div class="md:col-span-2">
+                    <label class="block text-sm font-semibold text-gray-600 mb-1">Tema de la Clase</label>
+                    <input type="text" id="tema" placeholder="Ej. El Ciclo del Agua y la Creación" class="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500 outline-none">
+                </div>
+            </form>
 
-            li.innerHTML = `<span>${n} &times; ${item.multiplier}</span> <span>= ${item.result}</span>`;
-            tableListContainer.appendChild(li);
-        });
-    }
+            <div class="mt-6 text-center">
+                <button onclick="generarPrompt()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full transition duration-300 transform hover:scale-105 shadow-md">
+                    <i class="fas fa-magic mr-2"></i> Generar Prompt Maestro
+                </button>
+            </div>
+        </div>
 
-    // --- MODO QUIZ ---
-    function startQuiz() {
-        quizActive = true;
-        currentQuestion = 1;
-        score = 0;
-        
-        // Cambiar vista
-        displayContent.classList.add('hidden');
-        quizSection.classList.remove('hidden');
-        
-        document.getElementById('next-btn').classList.add('hidden');
-        document.getElementById('check-btn').classList.remove('hidden');
-        document.getElementById('check-btn').disabled = false;
-        
-        updateScoreBoard();
-        generateQuestion();
-    }
+        <div id="resultSection" class="hidden bg-white rounded-lg shadow-md p-6 border-t-4 border-green-500">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-bold text-gray-800"><i class="fas fa-file-alt mr-2"></i> Prompt Generado</h2>
+                <div class="space-x-2">
+                    <button onclick="copiarPrompt()" class="bg-gray-100 hover:bg-gray-200 text-gray-700 py-2 px-4 rounded border transition">
+                        <i class="fas fa-copy mr-1"></i> Copiar Texto
+                    </button>
+                    <button onclick="descargarPDF()" class="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded transition">
+                        <i class="fas fa-file-pdf mr-1"></i> Descargar PDF
+                    </button>
+                </div>
+            </div>
 
-    function generateQuestion() {
-        // Lógica: Generar A y B aleatorios entre 1 y 10
-        const a = Math.floor(Math.random() * 10) + 1;
-        const b = Math.floor(Math.random() * 10) + 1;
-        
-        currentProblem = {
-            a: a,
-            b: b,
-            ans: a * b
-        };
+            <p class="text-sm text-gray-500 mb-2 bg-yellow-50 p-2 rounded border border-yellow-200">
+                <i class="fas fa-info-circle"></i> <strong>Instrucción:</strong> Copia el siguiente texto y pégalo en ChatGPT, Claude o Gemini para obtener tu secuencia didáctica detallada.
+            </p>
 
-        // Renderizar
-        document.getElementById('question-text').innerText = `¿Cuánto es ${a} x ${b}?`;
-        const input = document.getElementById('answer-input');
-        input.value = '';
-        input.disabled = false;
-        input.focus();
-        document.getElementById('feedback').innerText = '';
-        
-        document.getElementById('check-btn').classList.remove('hidden');
-        document.getElementById('next-btn').classList.add('hidden');
-    }
+            <textarea id="promptOutput" class="w-full h-96 p-4 bg-gray-50 border rounded font-mono text-sm leading-relaxed focus:outline-none focus:border-blue-500" readonly></textarea>
+        </div>
 
-    function checkAnswer() {
-        const input = document.getElementById('answer-input');
-        const feedback = document.getElementById('feedback');
-        const userVal = parseInt(input.value);
+    </main>
 
-        if (isNaN(userVal)) {
-            feedback.innerHTML = '<span style="color:orange">Por favor ingresa un número.</span>';
-            return;
+    <footer class="text-center p-6 text-gray-500 text-sm">
+        &copy; 2025 Herramienta Pedagógica Cristiana. Diseñado para potenciar la labor docente.
+    </footer>
+
+    <script>
+        function generarPrompt() {
+            // 1. Capturar datos
+            const grado = document.getElementById('grado').value || "[INSERTAR GRADO]";
+            const edad = document.getElementById('edad').value || "[INSERTAR EDAD]";
+            const materia = document.getElementById('materia').value || "[INSERTAR MATERIA]";
+            const duracion = document.getElementById('duracion').value;
+            const tema = document.getElementById('tema').value || "[INSERTAR TEMA]";
+
+            // 2. Construir el Prompt Detallado
+            const promptText = `
+🧠 ACTÚA COMO UN DOCENTE EXPERTO EN PEDAGOGÍA, NEUROEDUCACIÓN Y EDUCACIÓN CRISTIANA.
+
+Tu tarea es crear una **SECUENCIA DIDÁCTICA COMPLETA, EXTENSA Y DETALLADA**, describiendo paso a paso todo lo que ocurre en la clase. Usa un lenguaje claro, pedagógico y aplicable al aula. 
+⚠️ IMPORTANTE: Genera una estructura única. Evita plantillas repetitivas; asegúrate de que el inicio, desarrollo y cierre sean creativos y diferentes a otras respuestas anteriores.
+
+📝 DATOS DE ENTRADA PROPORCIONADOS:
+- Grado / Nivel: ${grado}
+- Edad de los estudiantes: ${edad}
+- Materia: ${materia}
+- Tema: ${tema}
+- Duración: ${duracion}
+
+---------------------------------------------------------
+A CONTINUACIÓN, DESARROLLA LOS SIGUIENTES PUNTOS OBLIGATORIOS:
+
+🎯 1. OBJETIVO GENERAL
+Redacta un objetivo claro, medible y observable (Taxonomía de Bloom), alineado con el tema y las competencias.
+
+✝️ 2. CONEXIÓN BÍBLICA DEL TEMA (Fundamento Espiritual)
+- 📖 Historia Bíblica Relacionada: Relata brevemente una historia bíblica pertinente y explica su enseñanza conectada a la vida diaria.
+- 📜 Versículo Bíblico: Cita un versículo clave y explica su relación con el contenido académico y el valor a formar.
+
+🧪 3. DIAGNÓSTICO INICIAL (Antes de empezar)
+Elabora 5 preguntas de selección múltiple adecuadas al nivel para identificar pre-saberes.
+
+🧠 4. ACTIVACIÓN DE PRE-SABERES
+Describe una actividad breve para activar conocimientos (Lluvia de ideas, preguntas guiadas, objeto misterioso, etc.).
+
+📚 5. SECUENCIA DIDÁCTICA DETALLADA (Paso a Paso)
+
+🔹 FASE 1: INICIO (Motivación e Introducción)
+- Dinámica rompehielos específica.
+- Presentación atractiva del tema.
+- Preguntas detonadoras (mínimo 5).
+- Conexión explícita con el valor cristiano.
+*Indicar: Tiempo, Rol docente, Rol estudiante y Materiales.*
+
+🔹 FASE 2: DESARROLLO (Construcción del Aprendizaje - EXTENSO)
+- Explicación teórica clara y contextualizada.
+- Ejemplos concretos.
+- **Actividades Guiadas:** Describe paso a paso juegos, retos o trabajo cooperativo.
+- Estrategias de neuroeducación (atención, emoción).
+- Preguntas de comprobación durante la clase.
+*Indicar: Qué dice/hace el docente, qué hacen los estudiantes y cómo se verifica la comprensión.*
+
+🔹 FASE 3: CIERRE (Metacognición y Aplicación)
+- Actividad de síntesis (mapa mental, ticket de salida, etc.).
+- Reflexión metacognitiva: ¿Qué aprendí hoy? ¿Cómo lo aplicaré?
+- Retroalimentación final.
+
+✅ 6. TEST DE SALIDA
+Incluye un test de 5 preguntas (selección múltiple o respuesta corta) para verificar el logro del objetivo.
+
+📊 7. EVALUACIÓN
+- Tipo (Diagnóstica, Formativa, Sumativa).
+- Instrumentos sugeridos (Rúbrica, Lista de cotejo).
+- Criterios de logro claros.
+
+🎒 8. RECURSOS Y MATERIALES
+Lista detallada de recursos físicos, digitales y visuales necesarios.
+
+🧩 9. ATENCIÓN A LA DIVERSIDAD
+Estrategias específicas para:
+- Estudiantes con dificultades.
+- Estudiantes con alto desempeño.
+- Diferentes ritmos de aprendizaje.
+
+💡 10. CIERRE PEDAGÓGICO FINAL (Reflexión Docente)
+Un párrafo inspirador sobre la importancia de este tema conectando fe, aprendizaje y vida.
+
+---------------------------------------------------------
+Por favor, entrega la respuesta con formato Markdown bien estructurado (negritas, títulos, viñetas) para facilitar la lectura.
+`.trim();
+
+            // 3. Mostrar resultado
+            document.getElementById('promptOutput').value = promptText;
+            document.getElementById('resultSection').classList.remove('hidden');
+            
+            // Hacer scroll hacia el resultado
+            document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth' });
         }
 
-        input.disabled = true;
-        document.getElementById('check-btn').classList.add('hidden');
-
-        if (userVal === currentProblem.ans) {
-            score++;
-            feedback.innerHTML = '<span class="feedback-correct">¡Correcto! 🎉</span>';
-        } else {
-            feedback.innerHTML = `<span class="feedback-wrong">Incorrecto. Era ${currentProblem.ans}.</span>`;
+        function copiarPrompt() {
+            const copyText = document.getElementById("promptOutput");
+            copyText.select();
+            copyText.setSelectionRange(0, 99999); /* Para móviles */
+            navigator.clipboard.writeText(copyText.value).then(() => {
+                alert("✅ ¡Prompt copiado al portapapeles! Ahora pégalo en tu IA.");
+            });
         }
 
-        updateScoreBoard();
-
-        // Lógica de fin de juego o siguiente pregunta
-        if (currentQuestion < totalQuestions) {
-            document.getElementById('next-btn').classList.remove('hidden');
-        } else {
-            feedback.innerHTML += `<br><strong>¡Quiz finalizado! Puntuación final: ${score}/${totalQuestions}</strong>`;
-            const restartBtn = document.createElement('button');
-            restartBtn.innerText = "Reiniciar Quiz";
-            restartBtn.className = "action-btn";
-            restartBtn.style.marginTop = "10px";
-            restartBtn.onclick = startQuiz;
-            feedback.appendChild(document.createElement('br'));
-            feedback.appendChild(restartBtn);
+        function descargarPDF() {
+            const element = document.getElementById('resultSection');
+            const opt = {
+                margin:       1,
+                filename:     'Prompt_Secuencia_Didactica.pdf',
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2 },
+                jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+            };
+            
+            // Usamos la librería html2pdf importada
+            html2pdf().set(opt).from(element).save();
         }
-    }
-
-    function nextQuestion() {
-        currentQuestion++;
-        updateScoreBoard();
-        generateQuestion();
-    }
-
-    function updateScoreBoard() {
-        document.getElementById('q-current').innerText = currentQuestion;
-        document.getElementById('score').innerText = score;
-    }
-</script>
-
+    </script>
 </body>
 </html>
